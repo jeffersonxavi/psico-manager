@@ -186,14 +186,8 @@
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-2">
-
-                    <button id="monthBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-l-md hover:bg-gray-200">
-                        Mês
-                    </button>
-
-                    <button id="weekBtn" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-r-md">
-                        Semana
-                    </button>
+                    <button id="monthBtn" class="viewBtn px-4 py-2 text-sm font-medium bg-gray-100 text-gray-600">Mês</button>
+                    <button id="weekBtn" class="viewBtn px-4 py-2 text-sm font-medium bg-blue-600 text-white">Semana</button>
 
                     <div class="flex items-center border border-gray-300 rounded-md ml-6">
                         <button id="prevBtn" class="p-2 hover:bg-gray-100">
@@ -216,11 +210,12 @@
                     </button>
                 </div>
 
-                <button onclick="openModal()" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-xl shadow">
+                <!-- BOTÃO NOVO PACIENTE -->
+                <button onclick="openPacienteModal()" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-xl shadow">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    Novo Agendamento
+                    Novo Paciente
                 </button>
             </div>
         </div>
@@ -235,56 +230,142 @@
         <div class="bg-white rounded-b-lg shadow-sm border border-gray-200 border-t-0 overflow-hidden">
             <div id="calendar"></div>
         </div>
-
     </div>
 </div>
-<!-- MODAL -->
-<div id="modalOverlay"
-    class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center z-50">
 
-    <div id="modalCard"
-        class="bg-white w-full max-w-md rounded-xl shadow-2xl p-6 transform scale-95 opacity-0 transition-all">
-
+<!-- MODAL NOVO PACIENTE -->
+<div id="pacienteModalOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+    <div id="pacienteModalCard" class="bg-white w-full max-w-2xl rounded-xl shadow-2xl p-6 transform scale-95 opacity-0 transition-all">
         <div class="flex justify-between items-center mb-4">
-            <h2 id="modalTitle" class="text-xl font-bold text-gray-800">
-                Novo Agendamento
-            </h2>
-            <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
-                ✕
-            </button>
+            <h2 class="text-xl font-bold text-gray-800">Novo Paciente</h2>
+            <button onclick="closePacienteModal()" class="text-gray-500 hover:text-gray-700">✕</button>
         </div>
 
-        <form>
+        <form id="formPaciente" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Nome Completo</label>
+                    <input type="text" name="nome" class="w-full mt-1 border-gray-300 rounded-lg" placeholder="Nome do Paciente" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Data de Nascimento</label>
+                    <input type="date" name="data_nascimento" class="w-full mt-1 border-gray-300 rounded-lg" required>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Telefone</label>
+                    <input type="tel" name="telefone" class="w-full mt-1 border-gray-300 rounded-lg" placeholder="(99) 99999-9999">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">E-mail</label>
+                    <input type="email" name="email" class="w-full mt-1 border-gray-300 rounded-lg" placeholder="email@exemplo.com">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Contato de Emergência</label>
+                    <input type="tel" name="contato_emergencia" class="w-full mt-1 border-gray-300 rounded-lg" placeholder="(99) 99999-9999">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Estado Civil</label>
+                    <select name="estado_civil" class="w-full mt-1 border-gray-300 rounded-lg">
+                        <option value="">Selecione</option>
+                        <option value="solteiro">Solteiro(a)</option>
+                        <option value="casado">Casado(a)</option>
+                        <option value="divorciado">Divorciado(a)</option>
+                        <option value="viuvo">Viúvo(a)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Profissão</label>
+                    <input type="text" name="profissao" class="w-full mt-1 border-gray-300 rounded-lg" placeholder="Profissão">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Endereço</label>
+                    <input type="text" name="endereco" class="w-full mt-1 border-gray-300 rounded-lg" placeholder="Rua, número, bairro">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-600">Histórico Médico / Observações</label>
+                <textarea name="observacoes" class="w-full mt-1 border-gray-300 rounded-lg" rows="4" placeholder="Informações importantes sobre o paciente"></textarea>
+            </div>
+
+            <button type="button" id="btnSalvarPaciente" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg shadow">
+                Salvar Paciente
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL AGENDAMENTO -->
+<div id="modalOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center z-50">
+    <div id="modalCard" class="bg-white w-full max-w-md rounded-xl shadow-2xl p-6 transform scale-95 opacity-0 transition-all">
+        <div class="flex justify-between items-center mb-4">
+            <h2 id="modalTitle" class="text-xl font-bold text-gray-800">Novo Agendamento</h2>
+            <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">✕</button>
+        </div>
+
+        <form id="formAgendamento">
             <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-600">Paciente</label>
-                <input type="text" class="w-full mt-1 border-gray-300 rounded-lg" placeholder="Nome do Paciente">
+                <select id="paciente_id" name="paciente_id" class="w-full mt-1 border-gray-300 rounded-lg">
+                    <option value="">Selecione o paciente</option>
+                    @foreach($pacientes as $paciente)
+                        <option value="{{ $paciente->id }}">{{ $paciente->nome }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="block text-sm font-medium text-gray-600">Título / Motivo</label>
+                <input type="text" id="titulo" name="titulo" class="w-full mt-1 border-gray-300 rounded-lg" placeholder="Ex: Sessão de terapia" required>
             </div>
 
             <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-600">Data</label>
-                <input id="modalDate" type="date" class="w-full mt-1 border-gray-300 rounded-lg">
+                <input id="modalDate" name="data_hora_inicio" type="date" class="w-full mt-1 border-gray-300 rounded-lg" required>
             </div>
 
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Início</label>
-                    <input id="modalStart" type="time" class="w-full mt-1 border-gray-300 rounded-lg">
+                    <input id="modalStart" name="hora_inicio" type="time" class="w-full mt-1 border-gray-300 rounded-lg" required>
                 </div>
-
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Fim</label>
-                    <input id="modalEnd" type="time" class="w-full mt-1 border-gray-300 rounded-lg">
+                    <input id="modalEnd" name="hora_fim" type="time" class="w-full mt-1 border-gray-300 rounded-lg" required>
                 </div>
             </div>
 
-            <button type="button"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg shadow">
-                Salvar (Frontend)
+            <div class="mb-3">
+                <label class="block text-sm font-medium text-gray-600">Observações</label>
+                <textarea id="observacoes" name="observacoes" class="w-full mt-1 border-gray-300 rounded-lg" rows="3" placeholder="Informações adicionais"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-600">Status</label>
+                <select id="status" name="status" class="w-full mt-1 border-gray-300 rounded-lg">
+                    <option value="agendada" selected>Agendada</option>
+                    <option value="realizada">Realizada</option>
+                    <option value="cancelada">Cancelada</option>
+                </select>
+            </div>
+
+            <button type="button" id="btnSalvarAgendamento" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg shadow">
+                Salvar Agendamento
             </button>
         </form>
     </div>
 </div>
 @endsection
+
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
@@ -293,7 +374,28 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pt-br.min.js"></script>
 
 <script>
-    /* ---------------- MODAL ---------------- */
+    /* ---------------- MODAL PACIENTE---------------- */
+    let pacienteModal = document.getElementById("pacienteModalOverlay");
+    let pacienteModalCard = document.getElementById("pacienteModalCard");
+
+    function openPacienteModal() {
+        pacienteModal.classList.remove("hidden");
+        setTimeout(() => {
+            pacienteModalCard.classList.remove("scale-95", "opacity-0");
+            pacienteModalCard.classList.add("scale-100", "opacity-100");
+        }, 20);
+    }
+
+    function closePacienteModal() {
+        pacienteModalCard.classList.add("scale-95", "opacity-0");
+        setTimeout(() => pacienteModal.classList.add("hidden"), 150);
+    }
+
+    pacienteModal.addEventListener("click", function(e) {
+        if (e.target === pacienteModal) closePacienteModal();
+    });
+
+    /* ---------------- MODAL AGENDAAMENTO ---------------- */
     let modal = document.getElementById("modalOverlay");
     let modalCard = document.getElementById("modalCard");
 
@@ -400,18 +502,8 @@
 
         /* ---- TÍTULO ---- */
         function updateTitle(info) {
-            const view = info.view.type; // <- pega a view atual
-
-            if (view === "dayGridMonth") {
-                // exibe Mês + Ano
-                const monthName = moment(info.start).format("MMMM YYYY");
-                document.getElementById('title').textContent = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-                return;
-            }
-
-            // --- título para semana ---
-            const start = moment(info.start).format('D');
-            const end = moment(info.end).subtract(1, 'day').format('D MMM');
+            const start = moment(info.start).format('D')
+            const end = moment(info.end).subtract(1, 'day').format('D MMM')
 
             document.getElementById('title').textContent = `Semana ${start} - ${end}`;
         }
@@ -427,6 +519,31 @@
         document.getElementById('monthBtn').onclick = () => {
             calendar.changeView('dayGridMonth');
         };
+
+        function setActive(view) {
+            const buttons = {
+                dayGridMonth: 'monthBtn',
+                timeGridWeek: 'weekBtn'
+            };
+            for (let key in buttons) {
+                const btn = document.getElementById(buttons[key]);
+                btn.classList.toggle('bg-blue-600', key === view);
+                btn.classList.toggle('text-white', key === view);
+                btn.classList.toggle('bg-gray-100', key !== view);
+                btn.classList.toggle('text-gray-600', key !== view);
+            }
+        }
+
+        document.getElementById('monthBtn').onclick = () => {
+            calendar.changeView('dayGridMonth');
+            setActive('dayGridMonth');
+        };
+        document.getElementById('weekBtn').onclick = () => {
+            calendar.changeView('timeGridWeek');
+            setActive('timeGridWeek');
+        };
+
+
     });
 </script>
 @endpush
