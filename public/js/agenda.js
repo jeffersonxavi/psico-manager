@@ -236,10 +236,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     window.updateAgendamento = function(id) {
-        const formData = new FormData(document.getElementById("formAgendamento"));
+        const form = document.getElementById("formAgendamento");
+
+        const date = document.getElementById("modalDate").value;
+        const start = document.getElementById("modalStart").value;
+        const end = document.getElementById("modalEnd").value;
+
+        const formData = new FormData(form);
+
+        // Corrigir dados antes de enviar
+        formData.set('data_hora_inicio', `${date} ${start}`);
+        formData.set('data_hora_fim', `${date} ${end}`);
+
+        console.log("ID RECEBIDO NO UPDATE:", id);
+
         fetch(`/consultas/${id}`, {
-            method: "PUT",
-            headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content") },
+            method: "POST",          // ← Laravel só aceita POST para FormData
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                "Accept": "application/json",
+                "X-HTTP-Method-Override": "PUT"   // ← Isso simula PUT corretamente
+            },
             body: formData
         })
         .then(res => res.json())
@@ -248,6 +265,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 calendar.refetchEvents();
                 closeModal();
                 alert(res.message);
+            } else {
+                console.error(res);
             }
         })
         .catch(err => console.error(err));
