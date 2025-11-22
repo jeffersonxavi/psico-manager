@@ -101,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         editable: false,
 
         events: "/api/consultas",
+        
 
         select: function (info) {
             openModal({ start: info.start, end: info.end });
@@ -237,4 +238,5 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(err => console.error(err));
     };
+    
 });

@@ -1,169 +1,195 @@
-   /* -----------------------------------------------------------
+/* -----------------------------------------------------------
    VARIÁVEIS GERAIS
 ----------------------------------------------------------- */
-    :root {
-        --fc-today-bg-color: #f8fafc;
-        --fc-border-color: #e5e7eb;
-        --fc-text-muted: #6b7280;
-        --fc-primary: #3b82f6;
-        --fc-primary-light: #eff6ff;
-    }
+:root {
+    --fc-today-bg-color: #f8fafc;
+    --fc-border-color: #e5e7eb;
+    --fc-text-muted: #6b7280;
+    --fc-primary: #3b82f6;
+    --fc-primary-light: #eff6ff;
+}
 
-    /* -----------------------------------------------------------
+/* -----------------------------------------------------------
    RESET DO HEADER NATIVO
 ----------------------------------------------------------- */
-    .fc-col-header {
-        display: none !important;
-    }
+.fc-col-header {
+    display: none !important;
+}
 
-    /* Remove bordas duplas */
-    .fc-scrollgrid-section-body .fc-timegrid-cols table {
-        border-left: none !important;
-        border-right: none !important;
-    }
+/* Remove bordas duplas */
+.fc-scrollgrid-section-body .fc-timegrid-cols table {
+    border-left: none !important;
+    border-right: none !important;
+}
 
-    .fc-timegrid-col {
-        border-right: 1px solid var(--fc-border-color);
-    }
+.fc-timegrid-col {
+    border-right: 1px solid var(--fc-border-color);
+}
 
-    .fc-timegrid-col:last-child {
-        border-right: none !important;
-    }
+.fc-timegrid-col:last-child {
+    border-right: none !important;
+}
 
-    .fc-timegrid-axis-frame {
-        border-bottom: none !important;
-    }
+.fc-timegrid-axis-frame {
+    border-bottom: none !important;
+}
 
-    /* -----------------------------------------------------------
+/* -----------------------------------------------------------
    COLUNA DE HORAS
 ----------------------------------------------------------- */
-    .fc-timegrid-slots col:first-child,
-    .fc-timegrid-cols col:first-child,
-    .fc-timegrid-axis {
-        width: 80px !important;
-        min-width: 80px !important;
-        max-width: 80px !important;
-        background: #f9fafb;
-        font-weight: 500;
-        border-right: 1px solid var(--fc-border-color);
-    }
+.fc-timegrid-slots col:first-child,
+.fc-timegrid-cols col:first-child,
+.fc-timegrid-axis {
+    width: 80px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
+    background: #f9fafb;
+    font-weight: 500;
+    border-right: 1px solid var(--fc-border-color);
+}
 
-    .fc-timegrid-slot-label {
-        text-align: right !important;
-        padding-right: 14px !important;
-        color: var(--fc-text-muted);
-        font-size: 0.85rem;
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-end;
-        height: 100%;
-        padding-top: 0px !important;
-    }
+.fc-timegrid-slot-label {
+    text-align: right !important;
+    padding-right: 14px !important;
+    color: var(--fc-text-muted);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    height: 100%;
+    padding-top: 0px !important;
+}
 
-    .fc-timegrid-axis-cushion {
-        margin-top: -6px;
-        line-height: 1.1;
-    }
+.fc-timegrid-axis-cushion {
+    margin-top: -6px;
+    line-height: 1.1;
+}
 
-    /* -----------------------------------------------------------
+/* -----------------------------------------------------------
    ALTURA DAS LINHAS (VISUAL PREMIUM)
 ----------------------------------------------------------- */
-    .fc-timegrid-slot {
-        height: 50px;
-    }
+.fc-timegrid-slot {
+    height: 50px;
+}
 
-    .fc-timegrid-slot-minor {
-        height: 25px;
-        border-color: #f1f5f9;
-    }
+.fc-timegrid-slot-minor {
+    height: 25px;
+    border-color: #f1f5f9;
+}
 
-    .fc-timegrid-slot:not(.fc-timegrid-slot-minor) {
-        border-top: 1px solid var(--fc-border-color);
-    }
+.fc-timegrid-slot:not(.fc-timegrid-slot-minor) {
+    border-top: 1px solid var(--fc-border-color);
+}
 
-    /* -----------------------------------------------------------
+/* -----------------------------------------------------------
    ESTILO DE EVENTOS (PROFISSIONAL)
 ----------------------------------------------------------- */
+.fc-event {
+    background: var(--fc-primary-light);
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 6px 8px;
+    color: var(--fc-primary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: 0.15s ease;
+}
+
+.fc-event:hover {
+    background: #e0f2fe;
+    border-color: var(--fc-primary);
+    transform: scale(1.02);
+}
+
+.fc-event-main-frame {
+    line-height: 1.25;
+}
+
+.event-time {
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.event-title {
+    font-size: 0.87rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* -----------------------------------------------------------
+   CABEÇALHO CUSTOMIZADO
+----------------------------------------------------------- */
+.custom-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: white;
+    border-top: 1px solid var(--fc-border-color);
+    border-bottom: 1px solid var(--fc-border-color);
+}
+
+.day-header {
+    padding: 12px 4px;
+    text-align: center;
+    border-right: 1px solid var(--fc-border-color);
+}
+
+.day-header:last-child {
+    border-right: none;
+}
+
+.day-name {
+    /* ===============================================
+   FORÇA AS CORES DOS EVENTOS DO BACKEND (v6+)
+   =============================================== */
     .fc-event {
-        background: var(--fc-primary-light);
-        border: 1px solid #bfdbfe;
-        border-radius: 10px;
-        padding: 6px 8px;
-        color: var(--fc-primary);
-        font-size: 0.82rem;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-        transition: 0.15s ease;
+        background-color: inherit !important;
+        border-color: inherit !important;
+        color: inherit !important;
+    }
+
+    /* Deixa bonito de novo, mas agora respeitando suas cores */
+    .fc-event {
+        border-radius: 12px !important;
+        padding: 5px 8px !important;
+        font-weight: 600 !important;
+        font-size: 0.84rem !important;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18) !important;
+        border: none !important;
+        transition: all 0.2s ease !important;
     }
 
     .fc-event:hover {
-        background: #e0f2fe;
-        border-color: var(--fc-primary);
-        transform: scale(1.02);
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
     }
+    font-size: 0.75rem;
+    color: var(--fc-text-muted);
+    letter-spacing: 0.5px;
+}
 
-    .fc-event-main-frame {
-        line-height: 1.25;
-    }
+.day-number {
+    margin-top: 4px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+}
 
-    .event-time {
-        font-size: 0.75rem;
-        font-weight: 600;
-        opacity: 0.9;
-    }
+.day-number.highlight {
+    background: var(--fc-primary);
+    color: white;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 6px auto 0;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
 
-    .event-title {
-        font-size: 0.87rem;
-        font-weight: 700;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
 
-    /* -----------------------------------------------------------
-   CABEÇALHO CUSTOMIZADO
------------------------------------------------------------ */
-    .custom-header {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        background: white;
-        border-top: 1px solid var(--fc-border-color);
-        border-bottom: 1px solid var(--fc-border-color);
-    }
-
-    .day-header {
-        padding: 12px 4px;
-        text-align: center;
-        border-right: 1px solid var(--fc-border-color);
-    }
-
-    .day-header:last-child {
-        border-right: none;
-    }
-
-    .day-name {
-        font-size: 0.75rem;
-        color: var(--fc-text-muted);
-        letter-spacing: 0.5px;
-    }
-
-    .day-number {
-        margin-top: 4px;
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #1f2937;
-    }
-
-    .day-number.highlight {
-        background: var(--fc-primary);
-        color: white;
-        border-radius: 50%;
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 6px auto 0;
-        box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-    }

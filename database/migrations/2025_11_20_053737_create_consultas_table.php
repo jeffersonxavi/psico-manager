@@ -16,7 +16,9 @@ return new class extends Migration
             $table->dateTime('data_hora_inicio');
             $table->dateTime('data_hora_fim');
             $table->text('observacoes')->nullable();
-            $table->enum('status', ['agendada', 'realizada', 'cancelada'])->default('agendada');
+            // Status da consulta
+            $table->enum('status', ['agendado', 'confirmado', 'atendido', 'faltou', 'desmarcado'])
+                  ->default('agendado');
             $table->timestamps();
 
             $table->foreign('profissional_id')->references('id')->on('users')->onDelete('cascade');

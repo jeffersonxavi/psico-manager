@@ -23,7 +23,6 @@ class ConsultaController extends Controller
     {
         $profissionalId = Auth::id();
 
-        // Recebe start e end do FullCalendar
         $start = \Carbon\Carbon::parse($request->start)->startOfDay();
         $end   = \Carbon\Carbon::parse($request->end)->endOfDay();
 
@@ -32,20 +31,43 @@ class ConsultaController extends Controller
             ->whereBetween('data_hora_inicio', [$start, $end])
             ->get();
 
-        $events = $consultas->map(function ($c) {
+        // Cores exatas conforme o <select>
+        $cores = [
+            'agendado'   => ['bg' => '#6b7280', 'border' => '#4b5563'], // cinza
+            'confirmado' => ['bg' => '#06b6d4', 'border' => '#0891b2'], // azul água
+            'atendido'   => ['bg' => '#16a34a', 'border' => '#15803d'], // verde
+            'faltou'     => ['bg' => '#eab308', 'border' => '#ca8a04'], // amarelo
+            'desmarcado' => ['bg' => '#dc2626', 'border' => '#b91c1c'], // vermelho
+        ];
+
+        $events = $consultas->map(function ($c) use ($cores) {
+
+            // Seleciona a cor do status ou cinza caso não exista
+            $cor = $cores[$c->status] ?? $cores['agendado'];
+
             return [
-                'id' => $c->id,
+                'id'    => $c->id,
                 'title' => $c->paciente->nome . ' - ' . $c->titulo,
-                'start' => $c->data_hora_inicio->format('Y-m-d\TH:i:s'),  // sem o +00:00
+                'start' => $c->data_hora_inicio->format('Y-m-d\TH:i:s'),
                 'end'   => $c->data_hora_fim->format('Y-m-d\TH:i:s'),
-                'backgroundColor' => '#2563eb',
-                'borderColor'     => '#1d4ed8',
-                'textColor'       => '#fff',
+
+                // Cores do evento
+                'backgroundColor' => $cor['bg'],
+                'borderColor'     => $cor['border'],
+                'textColor'       => '#ffffff',
+
+                // Dados extras úteis
+                'extendedProps' => [
+                    'status' => $c->status,
+                    'paciente_id' => $c->paciente_id,
+                    'titulo' => $c->titulo,
+                ],
             ];
         });
 
         return response()->json($events);
     }
+
 
 
     /**
@@ -59,7 +81,7 @@ class ConsultaController extends Controller
             'data_hora_inicio' => 'required|date',
             'data_hora_fim' => 'required|date|after:data_hora_inicio',
             'observacoes' => 'nullable|string',
-            'status' => 'nullable|in:agendada,realizada,cancelada',
+            'status' => 'nullable|in:agendado,confirmado,atendido,faltou,desmarcado',
         ]);
 
         $data['profissional_id'] = Auth::id();
@@ -85,7 +107,7 @@ class ConsultaController extends Controller
             'data_hora_inicio' => 'required|date',
             'data_hora_fim' => 'required|date|after:data_hora_inicio',
             'observacoes' => 'nullable|string',
-            'status' => 'nullable|in:agendada,realizada,cancelada',
+            'status' => 'nullable|in:agendado,confirmado,atendido,faltou,desmarcado',
         ]);
 
         $consulta->update($data);
@@ -112,29 +134,32 @@ class ConsultaController extends Controller
      * @param \Illuminate\Support\Collection $consultas
      * @return array
      */
-    protected function formatEventsForFullCalendar($consultas)
+    protected function formatEvent(Consulta $consulta)
     {
-        $events = [];
-        foreach ($consultas as $consulta) {
-            // O título do evento no calendário será o nome do paciente + título da consulta
-            $title = $consulta->paciente->nome . ' - ' . $consulta->titulo;
+        // Cores exatamente iguais ao seu select
+        $colors = [
+            'agendado'   => ['bg' => '#6b7280', 'border' => '#4b5563'], // gray-500 / gray-600
+            'confirmado' => ['bg' => '#06b6d4', 'border' => '#0891b2'], // cyan-500 / cyan-600
+            'atendido'   => ['bg' => '#16a34a', 'border' => '#15803d'], // green-600 / green-700
+            'faltou'     => ['bg' => '#eab308', 'border' => '#ca8a04'], // yellow-500 / yellow-600
+            'desmarcado' => ['bg' => '#dc2626', 'border' => '#b91c1c'], // red-600 / red-700
+        ];
 
-            $events[] = [
-                'id' => $consulta->id,
-                'title' => $title,
-                'start' => $consulta->data_hora_inicio->toISOString(),
-                'end' => $consulta->data_hora_fim->toISOString(),
-                // Configurações visuais (pode variar por status)
-                'backgroundColor' => '#2563eb', // Tailwind blue-600 (Primary)
-                'borderColor' => '#1d4ed8',
-                'textColor' => '#ffffff',
-                'extendedProps' => [
-                    'paciente_id' => $consulta->paciente_id,
-                    'titulo' => $consulta->titulo,
-                    'status' => $consulta->status,
-                ],
-            ];
-        }
-        return $events;
+        $color = $colors[$consulta->status] ?? ['bg' => '#6b7280', 'border' => '#4b5563']; // fallback cinza
+
+        return [
+            'id' => $consulta->id,
+            'title' => $consulta->paciente->nome . ' - ' . $consulta->titulo,
+            'start' => $consulta->data_hora_inicio->format('Y-m-d\TH:i:s'),
+            'end'   => $consulta->data_hora_fim->format('Y-m-d\TH:i:s'),
+            'backgroundColor' => $color['bg'],
+            'borderColor'     => $color['border'],
+            'textColor'       => '#ffffff',
+            'extendedProps' => [
+                'paciente_id' => $consulta->paciente_id,
+                'titulo'      => $consulta->titulo,
+                'status'      => $consulta->status,
+            ],
+        ];
     }
 }

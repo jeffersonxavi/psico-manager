@@ -83,7 +83,7 @@
                 <select id="paciente_id" name="paciente_id" class="w-full mt-1 border-gray-300 rounded-lg">
                     <option value="">Selecione o paciente</option>
                     @foreach($pacientes as $paciente)
-                        <option value="{{ $paciente->id }}">{{ $paciente->nome }}</option>
+                    <option value="{{ $paciente->id }}">{{ $paciente->nome }}</option>
                     @endforeach
                 </select>
             </div>
@@ -113,13 +113,14 @@
                 <label class="block text-sm font-medium text-gray-600">Observações</label>
                 <textarea id="observacoes" name="observacoes" class="w-full mt-1 border-gray-300 rounded-lg" rows="3" placeholder="Informações adicionais"></textarea>
             </div>
-
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-600">Status</label>
-                <select id="status" name="status" class="w-full mt-1 border-gray-300 rounded-lg">
-                    <option value="agendada" selected>Agendada</option>
-                    <option value="realizada">Realizada</option>
-                    <option value="cancelada">Cancelada</option>
+                <select id="status" name="status" class="w-full mt-1 border-gray-300 rounded-lg text-gray-800">
+                    <option value="agendado" selected class="text-gray-600">◉ Agendado</option>
+                    <option value="confirmado" class="text-cyan-500">◉ Confirmado</option>
+                    <option value="atendido" class="text-green-600">◉ Atendido</option>
+                    <option value="faltou" class="text-yellow-500">◉ Faltou</option>
+                    <option value="desmarcado" class="text-red-600">◉ Desmarcado</option>
                 </select>
             </div>
 
