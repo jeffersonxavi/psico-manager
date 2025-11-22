@@ -19,6 +19,28 @@ pacienteModal.addEventListener("click", function (e) {
     if (e.target === pacienteModal) closePacienteModal();
 });
 
+/* ---------------- CRIAR PACIENTE AJAX ---------------- */
+document.getElementById("btnSalvarPaciente").addEventListener("click", function () {
+    const form = document.getElementById("formPaciente");
+    const formData = new FormData(form);
+
+    fetch("/pacientes", {
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content") },
+        body: formData
+    })
+        .then(res => res.json())
+        .then(res => {
+            if (res.success) {
+                alert(res.message);
+                closePacienteModal();
+                location.reload(); // Atualiza select de pacientes
+            }
+        })
+        .catch(err => console.error(err));
+});
+
+
 /* ---------------- MODAL AGENDAMENTO ---------------- */
 let modal = document.getElementById("modalOverlay");
 let modalCard = document.getElementById("modalCard");
@@ -34,7 +56,16 @@ window.openModal = function (info = null) {
     document.getElementById("modalTitle").innerText =
         info && info.event ? "Editar Agendamento" : "Novo Agendamento";
 
-    if (info && info.start) {
+    if (info && info.event) {
+        const start = moment(info.event.start);
+        const end = moment(info.event.end || start.clone().add(30, "minutes"));
+
+        document.getElementById("modalDate").value = start.format("YYYY-MM-DD");
+        document.getElementById("modalStart").value = start.format("HH:mm");
+        document.getElementById("modalEnd").value = end.format("HH:mm");
+    }
+    // SE FOR SELEÇÃO NA AGENDA (NOVO)
+    else if (info && info.start) {
         const start = moment(info.start);
         const end = moment(info.end || start.clone().add(30, "minutes"));
 
@@ -59,27 +90,6 @@ window.closeModal = function () {
 
 modal.addEventListener("click", function (e) {
     if (e.target === modal) closeModal();
-});
-
-/* ---------------- CRIAR PACIENTE AJAX ---------------- */
-document.getElementById("btnSalvarPaciente").addEventListener("click", function () {
-    const form = document.getElementById("formPaciente");
-    const formData = new FormData(form);
-
-    fetch("/pacientes", {
-        method: "POST",
-        headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content") },
-        body: formData
-    })
-        .then(res => res.json())
-        .then(res => {
-            if (res.success) {
-                alert(res.message);
-                closePacienteModal();
-                location.reload(); // Atualiza select de pacientes
-            }
-        })
-        .catch(err => console.error(err));
 });
 
 /* ---------------- CALENDÁRIO ---------------- */
@@ -107,7 +117,27 @@ document.addEventListener("DOMContentLoaded", function () {
             openModal({ start: info.start, end: info.end });
         },
 
-        eventClick: function (info) {
+        eventClick: function(info) {
+
+            const event = info.event;
+
+            // Preenche os campos do formulário
+            document.getElementById("paciente_id").value = event.extendedProps.paciente_id;
+            document.getElementById("titulo").value = event.extendedProps.titulo;
+            document.getElementById("status").value = event.extendedProps.status;
+
+            // Preenche datas e horários
+            const inicio = event.start;
+            const fim = event.end;
+
+            document.getElementById("modalDate").value = inicio.toISOString().substring(0, 10);
+            document.getElementById("modalStart").value = inicio.toTimeString().substring(0, 5);
+            document.getElementById("modalEnd").value = fim.toTimeString().substring(0, 5);
+
+            // Define que o modal está editando
+            window.currentEventId = event.id;
+
+            // Abrir modal
             openModal(info);
         },
 

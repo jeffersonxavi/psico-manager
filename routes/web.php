@@ -4,17 +4,25 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\PacienteController;
 
-// Página inicial (welcome)
+// Página inicial
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Rotas protegidas (somente usuários logados)
-Route::middleware(['auth'])->group(function () {
+// Rotas protegidas
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
     // Agenda
     Route::get('/agenda', [ConsultaController::class, 'index'])->name('agenda.index');
-    
     Route::get('/api/consultas', [ConsultaController::class, 'apiEvents'])->name('consultas.api');
 
     Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
@@ -26,14 +34,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pacientes', [PacienteController::class, 'store'])->name('pacientes.store');
     Route::put('/pacientes/{paciente}', [PacienteController::class, 'update'])->name('pacientes.update');
     Route::delete('/pacientes/{paciente}', [PacienteController::class, 'destroy'])->name('pacientes.destroy');
+
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
