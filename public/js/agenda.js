@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
         locale: "pt-br",
+        timeZone: 'local',
         initialView: "timeGridWeek",
         headerToolbar: false,
         height: "auto",
@@ -99,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
         selectable: true,
         editable: false,
 
-        events: "/agenda/events", // Rota API Laravel para retornar eventos JSON
+        events: "/api/consultas",
 
         select: function (info) {
             openModal({ start: info.start, end: info.end });
@@ -166,57 +167,74 @@ document.addEventListener("DOMContentLoaded", function () {
             btn.classList.toggle("text-gray-600", key !== view);
         }
     }
-
     /* ---------------- FUNÇÕES CRUD AGENDAMENTO ---------------- */
-    function salvarAgendamento() {
-        const formData = new FormData(document.getElementById("formAgendamento"));
-        fetch("/agenda", {
+    window.salvarAgendamento = function() {
+        const form = document.getElementById("formAgendamento");
+
+        const date = document.getElementById("modalDate").value;
+        const start = document.getElementById("modalStart").value;
+        const end = document.getElementById("modalEnd").value;
+
+        const formData = new FormData(form);
+
+        // Combina data + hora
+        formData.set('data_hora_inicio', `${date} ${start}`);
+        formData.set('data_hora_fim', `${date} ${end}`);
+
+        fetch("/consultas", {
             method: "POST",
-            headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content") },
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                "Accept": "application/json"
+            },
             body: formData
         })
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    calendar.refetchEvents();
-                    closeModal();
-                    alert(res.message);
-                }
-            })
-            .catch(err => console.error(err));
-    }
+        .then(res => res.json())
+        .then(res => {
+            if (res.success) {
+                calendar.refetchEvents();
+                closeModal();
+                alert(res.message);
+            } else {
+                console.error(res.errors);
+                alert("Erro ao salvar: veja o console");
+            }
+        })
+        .catch(err => console.error(err));
+    };
 
-    function updateAgendamento(id) {
+
+    window.updateAgendamento = function(id) {
         const formData = new FormData(document.getElementById("formAgendamento"));
-        fetch(`/agenda/${id}`, {
+        fetch(`/consultas/${id}`, {
             method: "PUT",
             headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content") },
             body: formData
         })
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    calendar.refetchEvents();
-                    closeModal();
-                    alert(res.message);
-                }
-            })
-            .catch(err => console.error(err));
-    }
+        .then(res => res.json())
+        .then(res => {
+            if (res.success) {
+                calendar.refetchEvents();
+                closeModal();
+                alert(res.message);
+            }
+        })
+        .catch(err => console.error(err));
+    };
 
-    function deleteAgendamento(id) {
+    window.deleteAgendamento = function(id) {
         if (!confirm("Deseja realmente excluir este agendamento?")) return;
-        fetch(`/agenda/${id}`, {
+        fetch(`/consultas/${id}`, {
             method: "DELETE",
             headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content") }
         })
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    calendar.refetchEvents();
-                    alert(res.message);
-                }
-            })
-            .catch(err => console.error(err));
-    }
+        .then(res => res.json())
+        .then(res => {
+            if (res.success) {
+                calendar.refetchEvents();
+                alert(res.message);
+            }
+        })
+        .catch(err => console.error(err));
+    };
 });

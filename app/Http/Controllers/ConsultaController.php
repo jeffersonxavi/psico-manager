@@ -13,7 +13,8 @@ class ConsultaController extends Controller
     public function index()
     {
         $pacientes = Paciente::where('profissional_id', Auth::id())->get(['id', 'nome']);
-return view('agenda.index', compact('pacientes'));    }
+        return view('agenda.index', compact('pacientes'));
+    }
 
     /**
      * API para FullCalendar.
@@ -21,35 +22,31 @@ return view('agenda.index', compact('pacientes'));    }
     public function apiEvents(Request $request)
     {
         $profissionalId = Auth::id();
-        $start = $request->get('start');
-        $end = $request->get('end');
+
+        // Recebe start e end do FullCalendar
+        $start = \Carbon\Carbon::parse($request->start)->startOfDay();
+        $end   = \Carbon\Carbon::parse($request->end)->endOfDay();
 
         $consultas = Consulta::with('paciente')
             ->where('profissional_id', $profissionalId)
             ->whereBetween('data_hora_inicio', [$start, $end])
             ->get();
 
-        $events = [];
-        foreach ($consultas as $consulta) {
-            $events[] = [
-                'id' => $consulta->id,
-                'title' => $consulta->paciente->nome . ' - ' . $consulta->titulo,
-                'start' => $consulta->data_hora_inicio->toISOString(),
-                'end' => $consulta->data_hora_fim->toISOString(),
+        $events = $consultas->map(function ($c) {
+            return [
+                'id' => $c->id,
+                'title' => $c->paciente->nome . ' - ' . $c->titulo,
+                'start' => $c->data_hora_inicio->format('Y-m-d\TH:i:s'),  // sem o +00:00
+                'end'   => $c->data_hora_fim->format('Y-m-d\TH:i:s'),
                 'backgroundColor' => '#2563eb',
-                'borderColor' => '#1d4ed8',
-                'textColor' => '#ffffff',
-                'extendedProps' => [
-                    'paciente_id' => $consulta->paciente_id,
-                    'titulo' => $consulta->titulo,
-                    'observacoes' => $consulta->observacoes,
-                    'status' => $consulta->status,
-                ],
+                'borderColor'     => '#1d4ed8',
+                'textColor'       => '#fff',
             ];
-        }
+        });
 
         return response()->json($events);
     }
+
 
     /**
      * Cria uma nova consulta.

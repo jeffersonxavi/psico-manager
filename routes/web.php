@@ -14,6 +14,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Agenda
     Route::get('/agenda', [ConsultaController::class, 'index'])->name('agenda.index');
+    
     Route::get('/api/consultas', [ConsultaController::class, 'apiEvents'])->name('consultas.api');
 
     Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');

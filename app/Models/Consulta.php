@@ -19,6 +19,10 @@ class Consulta extends Model
         'status'
     ];
 
+    protected $casts = [
+    'data_hora_inicio' => 'datetime',
+    'data_hora_fim' => 'datetime',
+];
     public function profissional()
     {
         return $this->belongsTo(User::class, 'profissional_id');
