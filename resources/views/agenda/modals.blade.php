@@ -146,8 +146,8 @@
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Status</label>
                 <select id="status" name="status" class="w-full border-gray-300 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition shadow-sm text-gray-800 font-medium">
                     <option value="agendado" selected class="text-gray-600">🗓️ Agendado (Aguardando)</option>
-                    <option value="confirmado" class="text-green-600 font-medium">✅ Confirmado</option>
-                    <option value="atendido" class="text-blue-600 font-medium">🤝 Atendido / Concluído</option>
+                    <option value="confirmado" class="text-blue-600 font-medium">🤝 Confirmado</option>
+                    <option value="atendido" class="text-green-600 font-medium">✅ Atendido / Concluído</option>
                     <option value="faltou" class="text-yellow-600 font-medium">⚠️ Faltou / Não Compareceu</option>
                     <option value="desmarcado" class="text-red-600 font-medium">❌ Desmarcado / Cancelado</option>
                 </select>

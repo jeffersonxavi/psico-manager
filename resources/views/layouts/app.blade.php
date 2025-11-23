@@ -33,7 +33,7 @@
     <div class="flex flex-1 h-full">
         <!-- Sidebar -->
         <aside class="w-64 bg-white shadow-xl flex flex-col p-4 border-r">
-            <div class="text-xl font-bold text-gray-800 mb-6">PsicoManager</div>
+            <div class="text-xl font-bold text-gray-800 mb-6">Clínica Ellen Nani</div>
             <nav class="flex-1 space-y-2">
                 <a href="{{ route('agenda.index') }}" class="flex items-center p-3 rounded-xl bg-blue-100 text-primary font-semibold transition-colors">
                     Agenda

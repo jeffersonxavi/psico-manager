@@ -87,7 +87,6 @@
 .fc-event {
     background: var(--fc-primary-light);
     border: 1px solid #bfdbfe;
-    border-radius: 10px;
     padding: 6px 8px;
     color: var(--fc-primary);
     font-size: 0.82rem;
@@ -142,35 +141,6 @@
     border-right: none;
 }
 
-.day-name {
-    /* ===============================================
-   FORÇA AS CORES DOS EVENTOS DO BACKEND (v6+)
-   =============================================== */
-    .fc-event {
-        background-color: inherit !important;
-        border-color: inherit !important;
-        color: inherit !important;
-    }
-
-    /* Deixa bonito de novo, mas agora respeitando suas cores */
-    .fc-event {
-        border-radius: 12px !important;
-        padding: 5px 8px !important;
-        font-weight: 600 !important;
-        font-size: 0.84rem !important;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18) !important;
-        border: none !important;
-        transition: all 0.2s ease !important;
-    }
-
-    .fc-event:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
-    }
-    font-size: 0.75rem;
-    color: var(--fc-text-muted);
-    letter-spacing: 0.5px;
-}
 
 .day-number {
     margin-top: 4px;

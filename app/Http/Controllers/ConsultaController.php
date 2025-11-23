@@ -33,16 +33,16 @@ class ConsultaController extends Controller
 
         // Cores exatas conforme o <select>
         $cores = [
-            'agendado'   => ['bg' => '#6b7280', 'border' => '#4b5563'], // cinza
-            'confirmado' => ['bg' => '#06b6d4', 'border' => '#0891b2'], // azul água
-            'atendido'   => ['bg' => '#16a34a', 'border' => '#15803d'], // verde
-            'faltou'     => ['bg' => '#eab308', 'border' => '#ca8a04'], // amarelo
-            'desmarcado' => ['bg' => '#dc2626', 'border' => '#b91c1c'], // vermelho
+            'agendado'    => ['bg' => '#e2e8f0', 'border' => '#94a3b8', 'text' => '#1f2937'], // Cinza muito suave
+            'confirmado'  => ['bg' => '#bae6fd', 'border' => '#38bdf8', 'text' => '#0c4a6b'], // Azul
+            'atendido'    => ['bg' => '#a7f3d0', 'border' => '#34d399', 'text' => '#065f46'], // Verde
+            'faltou'      => ['bg' => '#fcd34d', 'border' => '#f59e0b', 'text' => '#713f12'], // Amarelo
+            'desmarcado'  => ['bg' => '#fecaca', 'border' => '#f87171', 'text' => '#7f1d1d'], // Vermelho
         ];
-
+        
         $events = $consultas->map(function ($c) use ($cores) {
 
-            // Seleciona a cor do status ou cinza caso não exista
+            // Seleciona a cor do status ou a cor padrão caso não exista
             $cor = $cores[$c->status] ?? $cores['agendado'];
 
             return [
@@ -51,10 +51,10 @@ class ConsultaController extends Controller
                 'start' => $c->data_hora_inicio->format('Y-m-d\TH:i:s'),
                 'end'   => $c->data_hora_fim->format('Y-m-d\TH:i:s'),
 
-                // Cores do evento
+                // Cores do evento: Usando as cores ajustadas para melhor contraste
                 'backgroundColor' => $cor['bg'],
                 'borderColor'     => $cor['border'],
-                'textColor'       => '#ffffff',
+                'textColor'       => $cor['text'], // Usa a cor de texto definida na paleta
 
                 // Dados extras úteis
                 'extendedProps' => [
@@ -133,32 +133,5 @@ class ConsultaController extends Controller
      * @param \Illuminate\Support\Collection $consultas
      * @return array
      */
-    protected function formatEvent(Consulta $consulta)
-    {
-        // Cores exatamente iguais ao seu select
-        $colors = [
-            'agendado'   => ['bg' => '#6b7280', 'border' => '#4b5563'], // gray-500 / gray-600
-            'confirmado' => ['bg' => '#06b6d4', 'border' => '#0891b2'], // cyan-500 / cyan-600
-            'atendido'   => ['bg' => '#16a34a', 'border' => '#15803d'], // green-600 / green-700
-            'faltou'     => ['bg' => '#eab308', 'border' => '#ca8a04'], // yellow-500 / yellow-600
-            'desmarcado' => ['bg' => '#dc2626', 'border' => '#b91c1c'], // red-600 / red-700
-        ];
-
-        $color = $colors[$consulta->status] ?? ['bg' => '#6b7280', 'border' => '#4b5563']; // fallback cinza
-
-        return [
-            'id' => $consulta->id,
-            'title' => $consulta->paciente->nome . ' - ' . $consulta->titulo,
-            'start' => $consulta->data_hora_inicio->format('Y-m-d\TH:i:s'),
-            'end'   => $consulta->data_hora_fim->format('Y-m-d\TH:i:s'),
-            'backgroundColor' => $color['bg'],
-            'borderColor'     => $color['border'],
-            'textColor'       => '#ffffff',
-            'extendedProps' => [
-                'paciente_id' => $consulta->paciente_id,
-                'titulo'      => $consulta->titulo,
-                'status'      => $consulta->status,
-            ],
-        ];
-    }
+   
 }
