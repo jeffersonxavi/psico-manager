@@ -81,44 +81,6 @@
     border-top: 1px solid var(--fc-border-color);
 }
 
-/* -----------------------------------------------------------
-   ESTILO DE EVENTOS (PROFISSIONAL)
------------------------------------------------------------ */
-.fc-event {
-    background: var(--fc-primary-light);
-    border: 1px solid #bfdbfe;
-    padding: 6px 8px;
-    color: var(--fc-primary);
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-    transition: 0.15s ease;
-}
-
-.fc-event:hover {
-    background: #e0f2fe;
-    border-color: var(--fc-primary);
-    transform: scale(1.02);
-}
-
-.fc-event-main-frame {
-    line-height: 1.25;
-}
-
-.event-time {
-    font-size: 0.75rem;
-    font-weight: 600;
-    opacity: 0.9;
-}
-
-.event-title {
-    font-size: 0.87rem;
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
 /* -----------------------------------------------------------
    CABEÇALHO CUSTOMIZADO
@@ -162,4 +124,149 @@
     box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 }
 
+/* -----------------------------------------------------------
+   ESTILO DE EVENTOS (PROFISSIONAL)
+----------------------------------------------------------- */
+.fc-event {
+    background: var(--fc-primary-light);
+    border: 1px solid #bfdbfe;
+    padding: 6px 8px;
+    color: var(--fc-primary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: 0.15s ease;
+}
 
+.fc-event:hover {
+    background: #e0f2fe;
+    border-color: var(--fc-primary);
+    transform: scale(1.02);
+}
+
+.fc-event-main-frame {
+    line-height: 1.25;
+}
+
+.event-time {
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.event-title {
+    font-size: 0.87rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.event-card {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 2px 0;
+}
+
+.event-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-time {
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.9;
+}
+
+.event-status {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 6px;
+    text-transform: capitalize;
+    white-space: nowrap;
+}
+
+.event-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.event-title {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    line-height: 1.1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/* -----------------------------------------------------------
+   EVENTO PREMIUM
+----------------------------------------------------------- */
+
+.ev-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 2px;
+}
+
+.ev-row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ev-time {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #1e293b;
+    opacity: 0.9;
+}
+
+.ev-status {
+    font-size: 0.67rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    text-transform: capitalize;
+    line-height: 1;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+}
+
+/* Permite quebra de linha dentro do card */
+.fc-event .ev-card {
+    white-space: normal !important;
+}
+
+/* Evita que palavras explodam para fora */
+.ev-name,
+.ev-title,
+.ev-status {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    white-space: normal; /* permite quebrar */
+}
+
+/* Deixa o evento mais "alto" em slots pequenos */
+.fc-timegrid-event {
+    padding: 2px 4px !important;
+}
+.ev-name {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
