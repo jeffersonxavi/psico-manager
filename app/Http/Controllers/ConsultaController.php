@@ -111,7 +111,6 @@ class ConsultaController extends Controller
         ]);
 
         $consulta->update($data);
-
         return response()->json(['success' => true, 'consulta' => $consulta, 'message' => 'Consulta atualizada com sucesso!'], 200);
     }
 

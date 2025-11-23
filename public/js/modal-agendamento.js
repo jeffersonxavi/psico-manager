@@ -26,17 +26,16 @@ window.openModalEdicao = function (info) {
     showModal();
 
     const event = info.event;
+    const id = event.id;
     document.getElementById("modalTitle").innerText = "Editar Agendamento";
 
     document.getElementById("paciente_id").value = event.extendedProps.paciente_id;
     document.getElementById("titulo").value = event.extendedProps.titulo;
     document.getElementById("status").value = event.extendedProps.status;
-
     document.getElementById("modalDate").value = moment(event.start).format("YYYY-MM-DD");
     document.getElementById("modalStart").value = moment(event.start).format("HH:mm");
     document.getElementById("modalEnd").value = moment(event.end).format("HH:mm");
 
-    const id = event.id;
       // Salvar vira UPDATE
     document.getElementById("btnSalvarAgendamento").onclick = () => updateAgendamento(id);
 

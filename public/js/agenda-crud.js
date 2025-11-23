@@ -31,7 +31,6 @@ window.salvarAgendamento = function () {
 window.updateAgendamento = function (id) {
     const form = document.getElementById("formAgendamento");
     const formData = new FormData(form);
-
     const date = document.getElementById("modalDate").value;
     const start = document.getElementById("modalStart").value;
     const end = document.getElementById("modalEnd").value;
