@@ -17,6 +17,8 @@ window.openModalAgendamento = function (info) {
     document.getElementById("modalEnd").value = end.format("HH:mm");
 
     document.getElementById("btnSalvarAgendamento").onclick = salvarAgendamento;
+    // esconder botão excluir
+    document.getElementById("btnExcluirAgendamento").classList.add("hidden");
 };
 
 // ABRE modal (edição)
@@ -35,7 +37,35 @@ window.openModalEdicao = function (info) {
     document.getElementById("modalEnd").value = moment(event.end).format("HH:mm");
 
     const id = event.id;
+      // Salvar vira UPDATE
     document.getElementById("btnSalvarAgendamento").onclick = () => updateAgendamento(id);
+
+    // Mostrar botão de excluir
+    const btnExcluir = document.getElementById("btnExcluirAgendamento");
+    btnExcluir.classList.remove("hidden");
+    btnExcluir.onclick = () => excluirAgendamento(id);
+};
+window.excluirAgendamento = function(id) {
+
+    if (!confirm("Tem certeza que deseja excluir este agendamento?")) {
+        return;
+    }
+
+    fetch(`/consultas/${id}`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": document.head.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Erro ao excluir");
+        return res.json();
+    })
+    .then(() => {
+        calendar.refetchEvents();
+        closeModal();
+    })
+    .catch(err => console.error(err));
 };
 
 // MOSTRAR modal
