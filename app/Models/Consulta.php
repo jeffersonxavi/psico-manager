@@ -32,4 +32,9 @@ class Consulta extends Model
     {
         return $this->belongsTo(Paciente::class);
     }
+        // 🔥 TODAS as evoluções ligadas à consulta
+    public function evolucoes()
+    {
+        return $this->hasMany(Evolucao::class);
+    }
 }

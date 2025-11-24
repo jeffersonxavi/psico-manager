@@ -23,4 +23,8 @@ class Paciente extends Model
     {
         return $this->hasMany(Consulta::class);
     }
+        public function evolucoes()
+    {
+        return $this->hasMany(Evolucao::class);
+    }
 }

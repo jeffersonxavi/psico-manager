@@ -59,7 +59,8 @@
     </div>
 </div>
 
-@include('agenda.modals')
+@include('pacientes.create')
+@include('agenda.modal-agendamento')
 @endsection
 
 
@@ -71,7 +72,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pt-br.min.js"></script>
 <script src="/js/calendar.js"></script>
 <script src="/js/modal-agendamento.js"></script>
-<script src="/js/modal-paciente.js"></script>
 <script src="/js/agenda-crud.js"></script>
 <script src="/js/header-navegacao.js"></script>
 @endpush
