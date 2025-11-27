@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sessao extends Model
-{
+{    
+    use HasFactory;
+
     protected $table = 'sessoes'; // importante, pois Laravel pluraliza errado
     protected $fillable = ['paciente_id','profissional_id','conteudo','data_sessao','consulta_id'];
 
