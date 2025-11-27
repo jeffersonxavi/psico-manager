@@ -37,8 +37,8 @@
     {{-- REGISTROS --}}
     @if($sessao->registros->count())
         <div class="space-y-3 mt-4">
-            @foreach($sessao->registros as $reg)
-                @include('registros.partials.registro-item', ['reg' => $reg])
+            @foreach($sessao->registros as $registro)
+                @include('registros.partials.registro-item', compact('registro'))
             @endforeach
         </div>
     @endif
