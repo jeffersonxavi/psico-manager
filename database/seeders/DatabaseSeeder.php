@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         foreach ($pacientes as $paciente) {
 
             $consultas = Consulta::factory()
-                ->count(3) // <<< 3 consultas por paciente
+                ->count(300) // <<< 3 consultas por paciente
                 ->create([
                     'profissional_id' => $user->id,
                     'paciente_id' => $paciente->id,

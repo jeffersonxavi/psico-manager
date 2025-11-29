@@ -28,4 +28,10 @@ class Registro extends Model
     public function profissional() {
         return $this->belongsTo(User::class, 'profissional_id');
     }
+    
+    public function registros()
+    {
+        return $this->hasMany(Registro::class, 'sessao_id');
+    }
+
 }

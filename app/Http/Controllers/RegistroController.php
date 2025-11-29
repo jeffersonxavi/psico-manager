@@ -3,72 +3,77 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Sessao;
+use App\Models\Registro;
 use App\Models\Paciente;
+use App\Models\Sessao;
 use Illuminate\Support\Facades\Auth;
 
-class SessaoController extends Controller
+class RegistroController extends Controller
 {
-    // Listar todas as sessões de um paciente
-    public function index(Paciente $paciente)
-    {
-        $sessoes = $paciente->sessoes()
-            ->with('registros.profissional', 'profissional')
-            ->orderBy('data_sessao', 'desc')
-            ->get();
-
-        return view('prontuario.index', compact('paciente', 'sessoes'));
-    }
-
-    // Criar nova sessão
-    public function store(Request $request, Paciente $paciente)
+    /**
+     * Criar novo registro dentro de uma sessão
+     */
+    public function store(Request $request, Paciente $paciente, Sessao $sessao)
     {
         $request->validate([
-            'data_sessao' => 'required|date',
-            'conteudo'    => 'nullable|string',
+            'tipo'          => 'required|in:evolucao,anotacao,feedback,interconsulta',
+            'conteudo'      => 'required|string',
+            'data_registro' => 'nullable|date',
         ]);
 
-        Sessao::create([
+        Registro::create([
             'paciente_id'     => $paciente->id,
+            'sessao_id'       => $sessao->id,
             'profissional_id' => Auth::id(),
-            'data_sessao'     => $request->data_sessao,
+            'tipo'            => $request->tipo,
             'conteudo'        => $request->conteudo,
+            'data_registro'   => $request->data_registro ?? now(),
         ]);
 
-        return redirect()->route('prontuario.index', $paciente->id)
-            ->with('success', 'Sessão criada com sucesso!');
+        return redirect()
+            ->route('prontuario.index', $paciente->id)
+            ->with('success', 'Registro criado com sucesso!');
     }
 
-    // Mostrar formulário de edição
-    public function edit(Sessao $sessao)
+    /**
+     * Formulário de edição
+     */
+    public function edit(Paciente $paciente, Sessao $sessao, Registro $registro)
     {
-        return view('sessoes.edit', compact('sessao'));
+        return view('registros.edit', compact('paciente', 'sessao', 'registro'));
     }
 
-    // Atualizar sessão
-    public function update(Request $request, Sessao $sessao)
+    /**
+     * Atualizar o registro
+     */
+    public function update(Request $request, Paciente $paciente, Sessao $sessao, Registro $registro)
     {
         $request->validate([
-            'data_sessao' => 'required|date',
-            'conteudo'    => 'nullable|string',
+            'tipo'          => 'required|in:evolucao,anotacao,feedback,interconsulta',
+            'conteudo'      => 'required|string',
+            'data_registro' => 'nullable|date',
         ]);
 
-        $sessao->update([
-            'data_sessao' => $request->data_sessao,
-            'conteudo'    => $request->conteudo,
+        $registro->update([
+            'tipo'          => $request->tipo,
+            'conteudo'      => $request->conteudo,
+            'data_registro' => $request->data_registro ?? now(),
         ]);
 
-        return redirect()->route('prontuario.index', $sessao->paciente_id)
-            ->with('success', 'Sessão atualizada com sucesso!');
+        return redirect()
+            ->route('prontuario.index', $paciente->id)
+            ->with('success', 'Registro atualizado com sucesso!');
     }
 
-    // Deletar sessão
-    public function destroy(Sessao $sessao)
+    /**
+     * Deletar registro
+     */
+    public function destroy(Paciente $paciente, Sessao $sessao, Registro $registro)
     {
-        $paciente_id = $sessao->paciente_id;
-        $sessao->delete();
+        $registro->delete();
 
-        return redirect()->route('prontuario.index', $paciente_id)
-            ->with('success', 'Sessão excluída com sucesso!');
+        return redirect()
+            ->route('prontuario.index', $paciente->id)
+            ->with('success', 'Registro excluído com sucesso!');
     }
 }

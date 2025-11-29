@@ -43,11 +43,15 @@ Route::middleware([
         Route::get('{paciente}/sessoes', [SessaoController::class, 'index'])->name('prontuario.index');
         Route::post('{paciente}/sessoes', [SessaoController::class, 'store'])->name('sessoes.store');
 
-        // Registros dentro de paciente
-        Route::post('{paciente}/registros', [RegistroController::class, 'store'])->name('registros.store');
-            // web.php → dentro do group auth
-    Route::get('{paciente}/sessoes/create', [SessaoController::class, 'create'])
-        ->name('sessoes.create');
+           // REGISTROS — AGORA COM SESSAO!
+    Route::prefix('{paciente}/sessoes/{sessao}/registros')->group(function () {
+
+        Route::post('/', [RegistroController::class, 'store'])->name('registros.store');
+        Route::get('{registro}/edit', [RegistroController::class, 'edit'])->name('registros.edit');
+        Route::put('{registro}', [RegistroController::class, 'update'])->name('registros.update');
+        Route::delete('{registro}', [RegistroController::class, 'destroy'])->name('registros.destroy');
+
+    });
     });
 
     // Sessões individuais (edit/update/delete)
@@ -63,6 +67,9 @@ Route::middleware([
     // Iniciar atendimento
     Route::get('/consultas/{consulta}/iniciar-atendimento', [ConsultaController::class, 'iniciarAtendimento'])
         ->name('consultas.iniciar-atendimento');
-
+// Adicione isso logo abaixo da rota da agenda
+Route::get('/consultas', function () {
+    return redirect()->route('agenda.index');
+})->name('consultas.index');
 
 });

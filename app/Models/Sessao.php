@@ -11,6 +11,9 @@ class Sessao extends Model
 
     protected $table = 'sessoes'; // importante, pois Laravel pluraliza errado
     protected $fillable = ['paciente_id','profissional_id','conteudo','data_sessao','consulta_id'];
+    protected $casts = [
+        'data_sessao' => 'datetime',
+    ];
 
     public function paciente()
     {

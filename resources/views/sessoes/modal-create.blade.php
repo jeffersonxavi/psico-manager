@@ -13,13 +13,7 @@
         <div class="{{ session('consulta_id') ? 'bg-gradient-to-r from-emerald-500 to-teal-600' : 'bg-gray-800' }} text-white p-5">
             <div class="flex justify-between items-start">
                 <div>
-                    <h2 class="text-xl font-bold flex items-center gap-3">
-                        @if(session('consulta_id'))
-                            Atendimento da Consulta
-                        @else
-                            Nova Sessão Avulsa
-                        @endif
-                    </h2>
+                    <h2 class="text-xl font-bold flex items-center gap-3" x-text="tituloModal"></h2>
                     <p class="text-white/90 text-lg">{{ $paciente->nome }}</p>
                     @if(session('consulta_id'))
                         <span class="inline-flex items-center gap-1 mt-2 text-sm bg-white/25 px-3 py-1 rounded-full">
@@ -82,7 +76,7 @@
                         </button>
                         <button type="submit"
                                 class="px-8 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
-                            Salvar Sessão
+                            <span x-text="textoBotao"></span>
                         </button>
                     </div>
                 </div>
