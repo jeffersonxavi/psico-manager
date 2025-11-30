@@ -33,7 +33,7 @@ class SessaoController extends Controller
 {
     $request->validate([
         'data_sessao' => 'required|date',
-        'conteudo'    => 'required|string|min:20',
+        'conteudo'    => 'required|string',
     ]);
 
     $sessao = $paciente->sessoes()->create([

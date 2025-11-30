@@ -56,7 +56,7 @@
                 @include('registros.partials.registro-item', compact('registro', 'sessao'))
             @endforeach
         @else
-            <p class="text-center text-gray-400 italic py-8">Nenhum registro adicionado ainda.</p>
+            <p class="text-center text-gray-400 italic py-8">Clique no card abaixo para adicionar registros ocorridos após a sessão.</p>
         @endif
     </div>
 

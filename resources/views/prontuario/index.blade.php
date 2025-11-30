@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-indigo-50/20">
-    <div class="max-w-5xl mx-auto px-6 py-10"
+    <div class="mx-auto px-6 py-10"
          x-data="sessaoModal({{ session()->pull('abrir_modal_sessao') ? 'true' : 'false' }})">
 
         <!-- Cabeçalho -->
