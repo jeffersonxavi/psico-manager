@@ -11,7 +11,6 @@ use App\Http\Controllers\RegistroController;
 Route::get('/', function () {
     return view('welcome');
 });
-//TESTEE
 // Rotas protegidas por autenticação
 Route::middleware([
     'auth:sanctum',
