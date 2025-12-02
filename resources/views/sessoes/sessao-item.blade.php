@@ -12,9 +12,9 @@
                     {{-- Indicador de status/atualização --}}
                     <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
 
-                    {{-- Título da Sessão --}}
+                    {{-- Título da Sessão (MODIFICADO AQUI!) --}}
                     <h3 class="text-md font-extrabold text-gray-800">
-                        Sessão • {{ $sessao->data_sessao->format('d/m/Y \à\s H:i') }}
+                        {{ $loop->count - $loop->index }}ª Sessão • {{ $sessao->data_sessao->format('d/m/Y \à\s H:i') }}
                     </h3>
                 </div>
 
@@ -94,7 +94,7 @@
     {{-- ------------------------------------------------------------------------------------------------ --}}
     
     {{-- ## BOTÃO / FORMULÁRIO (Condicional - Alpine.js) --}}
-    <div class="border-t border-gray-200"> 
+    <div class="border-t border-gray-200">
         {{-- 1. Botão Adicionar (Mostrado se showForm for falso) --}}
         <div x-show="!showForm" class="p-3 text-center">
             <button @click="showForm = true"
@@ -107,7 +107,7 @@
         </div>
 
         {{-- 2. Formulário (Mostrado se showForm for verdadeiro) --}}
-        <div x-show="showForm" x-transition:enter.duration.300ms 
+        <div x-show="showForm" x-transition:enter.duration.300ms
              class="bg-gray-50/50">
             {{-- Inclui o Formulário de Registro --}}
             @include('registros.partials.form', ['sessao' => $sessao])

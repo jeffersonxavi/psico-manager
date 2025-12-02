@@ -14,6 +14,7 @@ class SessaoController extends Controller
     {
         $sessoes = $paciente->sessoes()
             ->with('registros.profissional')
+            // ALTERADO: Ordenar de forma DECRESCENTE (da mais recente para a mais antiga)
             ->orderBy('data_sessao', 'desc')
             ->get();
 
@@ -53,6 +54,8 @@ class SessaoController extends Controller
         $mensagem .= ' Consulta marcada como atendida.';
     }
 
+    // Redireciona para o prontuário. Se a ordem foi alterada para ASC,
+    // o usuário verá a nova sessão no final da lista.
     return redirect()
         ->route('prontuario.index', $paciente)
         ->with('success', $mensagem);
