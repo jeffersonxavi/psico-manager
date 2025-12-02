@@ -25,35 +25,59 @@
                 Nova Sessão
             </button>
         </div>
-
-        <div id="lista-sessoes" class="space-y-10" x-cloak>
+        <div id="lista-sessoes" x-cloak>
             @forelse($sessoes as $sessao)
-                <div x-transition:enter="transition ease-out duration-600"
-                     x-transition:enter-start="opacity-0 translate-y-10 scale-98"
-                     x-transition:enter-end="opacity-100 translate-y-0 scale-100">
-                    @include('sessoes.sessao-item', compact('sessao', 'paciente'))
-                </div>
-            @empty
-                <div class="max-w-lg mx-auto text-center py-10 bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-lg">
-                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center">
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                                d="M9 12h6m-6-4h6m-6 8h6m-9 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
+                {{-- 1. O contêiner de colunas DEVE envolver TODOS os itens quando eles existirem. --}}
+                @if ($loop->first)
+                    <div class="columns-1 sm:columns-2 xl:columns-3 space-y-8 gap-8">
+                @endif
+
+                    {{-- O item individual (card) deve ter 'break-inside-avoid' --}}
+                    <div 
+                        class="break-inside-avoid mb-8" 
+                        x-transition:enter="transition ease-out duration-500"
+                        x-transition:enter-start="opacity-0 translate-y-12 scale-95"
+                        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                    >
+            {{-- CÓDIGO CORRIGIDO DO LOOP PRINCIPAL --}}
+        <div class="break-inside-avoid mb-8">
+            {{-- Card da sessão (o padding interno será tratado dentro do 'sessao-item') --}}
+            <div>
+                @include('sessoes.sessao-item', compact('sessao', 'paciente'))
+            </div>
+            </div>
+                        
+                        {{-- O overlay de hover não precisa do 'absolute inset-0' aqui 
+                            a menos que a div 'break-inside-avoid' tenha 'relative' --}}
+                        </div>
+
+                {{-- 2. Fechar o contêiner de colunas no final do loop --}}
+                @if ($loop->last)
                     </div>
-                    <h3 class="text-lg font-bold text-gray-800 mb-1">Nenhuma sessão registrada</h3>
-                    <p class="text-gray-600 text-sm mb-6">Comece registrando o primeiro atendimento.</p>
-                    <button @click="novaSessao()"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-md hover:shadow-xl transition-all">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        Criar sessão
-                    </button>
+                @endif
+
+            @empty
+                {{-- Bloco @empty: Centralizado e com largura total (W-FULL) --}}
+                <div class="w-full flex justify-center py-16">
+                    <div class="max-w-xl text-center p-10 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200 shadow-xl">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6-4h6m-6 8h6m-9 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Nenhuma sessão registrada</h3>
+                        <p class="text-gray-600 mb-8">Comece registrando o primeiro atendimento deste paciente.</p>
+                        <button @click="novaSessao()"
+                            class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Criar primeira sessão
+                        </button>
+                    </div>
                 </div>
             @endforelse
         </div>
-
         @include('sessoes.modal-create')
 
         <div 
