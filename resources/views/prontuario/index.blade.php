@@ -1,5 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Prontuário • ' . $paciente->nome)
+@section('pageTitle', 'Sessões')
+@section('pageTitle', 'Prontuário • ' . $paciente->nome)
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-indigo-50/20">

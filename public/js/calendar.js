@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // 🚨 MUDANÇA CRÍTICA 1: Habilitar Edição
         editable: true,
         eventMinDuration: "00:30:00", // Duração mínima de 30 minutos
-        snapDuration: "00:15:00", // Ajusta o arraste e redimensionamento a cada 15 minutos
+        snapDuration: "00:30:00", // Ajusta o arraste e redimensionamento a cada 15 minutos
         eventConstraint: {
             // Restringe movimento aos limites da agenda
             startTime: "08:00",

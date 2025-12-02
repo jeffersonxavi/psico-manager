@@ -1,6 +1,6 @@
 <div>
 
-    <div
+    <!-- <div
         id="loadingOverlay"
         class="fixed inset-0 bg-black/40 backdrop-blur-sm
                flex items-center justify-center z-[100] hidden"
@@ -13,7 +13,7 @@
             <span class="text-gray-700 font-semibold text-lg">Processando...</span>
             <span class="text-gray-500 text-sm">Aguarde um momento, por favor.</span>
         </div>
-    </div>
+    </div> -->
     <div id="modalOverlay"
          class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center z-[60] transition-opacity duration-200">
 
@@ -149,43 +149,50 @@
 </div>
 <script>
     const form = document.getElementById('formAgendamento');
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const modalOverlay = document.getElementById('modalOverlay');
+    const loadingOverlay = document.getElementById('loadingOverlay'); 
+    const modalOverlay = document.getElementById('modalOverlay'); 
 
-    // Funções de controle do Modal (assumindo que já existem, mas garantindo)
-    function openModal() {
-        modalOverlay.classList.remove('hidden');
-        // Adiciona as classes de transição após um pequeno atraso
-        setTimeout(() => {
-            modalOverlay.style.opacity = '1';
-            document.getElementById('modalCard').classList.remove('scale-95', 'opacity-0');
-            document.getElementById('modalCard').classList.add('scale-100', 'opacity-100');
-        }, 10); 
-    }
-
+    // Assumindo que a função closeModal() existe e tem uma transição de ~150ms
 
     // NOVO: Função que lida com o envio do formulário
     form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Impede o envio padrão do formulário
+        event.preventDefault(); 
 
         // 1. Mostrar o Loading
-        loadingOverlay.classList.remove('hidden');
+        if (loadingOverlay) {
+            loadingOverlay.classList.remove('hidden');
+        }
 
-        // 2. Coletar dados do formulário
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
         
-        console.log('Dados a serem enviados:', data);
-
-        // SIMULAÇÃO DE ATRASO (Remova esta seção quando usar o fetch/axios real)
+        // SIMULAÇÃO DE ATRASO (Representando a requisição HTTP real)
         setTimeout(() => {
             console.log('Agendamento salvo com sucesso (simulado)!');
             
-            // 4. Esconder o Loading e fechar o modal
-            loadingOverlay.classList.add('hidden');
+            // 2. Primeiro, ESCONDE o Loading e INICIA a transição do modal principal
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('hidden');
+            }
             closeModal(); 
-        }, 1000); // 2 segundos de simulação
-    });
- 
+            
+            // 3. SweetAlert de Sucesso (Executa após o modal principal fechar)
+            // O tempo de 200ms garante que a transição de fechamento do closeModal() (cerca de 150ms) termine.
+            setTimeout(() => {
+                /* Swal.fire({
+                    icon: 'success',
+                    title: 'Agendamento Salvo!', 
+                        timer: 2000,
+                    showConfirmButton: false
+                }); */
 
+                // Opcional: Recarregar o calendário (Se estiver integrando o FullCalendar)
+                // if (typeof calendar !== 'undefined' && calendar.refetchEvents) {
+                //     calendar.refetchEvents();
+                // }
+                
+            }, 200); // <-- Novo timeout para o SweetAlert
+
+        }, 0); // <-- Tempo de simulação da requisição reduzido para 500ms (mais realista)
+    });
 </script>

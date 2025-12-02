@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Agenda')
+@section('pageTitle', 'Agenda')
 
 @push('styles')
 <link href="{{ asset('css/agenda.css') }}" rel="stylesheet">

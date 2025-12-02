@@ -92,12 +92,28 @@
     </div>
 </div>
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+@endpush
 
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
 
-        // =============== FUNÇÕES GLOBAIS ===============
-        window.openPacienteModal = function() {
+        // =============== ABRIR MODAL ===============
+        window.openPacienteModal = function () {
             const overlay = document.getElementById('pacienteModalOverlay');
             const card = document.getElementById('pacienteModalCard');
             const form = document.getElementById('formPaciente');
@@ -105,12 +121,13 @@
             overlay.classList.remove('hidden');
             setTimeout(() => card.classList.remove('scale-95', 'opacity-0'), 10);
 
-            document.getElementById('pacienteModalTitle').innerText = 'Cadastro de Novo Paciente';
+            document.getElementById('pacienteModalTitle').textContent = 'Cadastro de Novo Paciente';
             form.reset();
             document.getElementById('pacienteId').value = '';
         };
 
-        window.closePacienteModal = function() {
+        // =============== FECHAR MODAL ===============
+        window.closePacienteModal = function () {
             const overlay = document.getElementById('pacienteModalOverlay');
             const card = document.getElementById('pacienteModalCard');
 
@@ -118,7 +135,8 @@
             setTimeout(() => overlay.classList.add('hidden'), 300);
         };
 
-        window.editPaciente = function(id) {
+        // =============== EDITAR PACIENTE ===============
+        window.editPaciente = function (id) {
             fetch(`/pacientes/${id}`)
                 .then(res => {
                     if (!res.ok) throw new Error('Paciente não encontrado');
@@ -126,79 +144,109 @@
                 })
                 .then(paciente => {
                     openPacienteModal();
-                    document.getElementById('pacienteModalTitle').innerText = 'Editar Paciente';
+                    document.getElementById('pacienteModalTitle').textContent = 'Editar Paciente';
 
                     const form = document.getElementById('formPaciente');
                     form.nome.value = paciente.nome || '';
-                    form.data_nascimento.value = paciente.data_nascimento || '';
                     form.telefone.value = paciente.telefone || '';
                     form.email.value = paciente.email || '';
-                    form.endereco.value = paciente.endereco || '';
-                    form.profissao.value = paciente.profissao || '';
-                    form.estado_civil.value = paciente.estado_civil || '';
+                    form.data_nascimento.value = paciente.data_nascimento || '';
                     form.contato_emergencia.value = paciente.contato_emergencia || '';
+                    form.estado_civil.value = paciente.estado_civil || '';
+                    form.profissao.value = paciente.profissao || '';
+                    form.endereco.value = paciente.endereco || '';
                     form.observacoes.value = paciente.observacoes || '';
 
                     document.getElementById('pacienteId').value = paciente.id;
                 })
-                .catch(err => {
-                    console.error(err);
-                    alert('Erro ao carregar os dados do paciente.');
+                .catch(() => {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Erro ao carregar paciente'
+                    });
                 });
         };
 
-        // =============== DELEGAÇÃO DO CLIQUE EM "EDITAR" ===============
-        document.addEventListener('click', function(e) {
-            const link = e.target.closest('.editar-paciente');
-            if (link) {
-                e.preventDefault();
-                const id = link.getAttribute('data-id');
-                if (id) editPaciente(id);
-            }
-        });
-
-        // =============== SALVAR (CREATE / UPDATE) ===============
-        const btnSalvar = document.getElementById("btnSalvarPaciente");
-        if (btnSalvar) {
-            btnSalvar.addEventListener("click", function() {
-                const form = document.getElementById("formPaciente");
-                const formData = new FormData(form);
-                const pacienteId = document.getElementById("pacienteId").value;
-
-                let url = '/pacientes';
-                let method = 'POST';
-
-                if (pacienteId) {
-                    url = `/pacientes/${pacienteId}`;
-                    formData.append('_method', 'PUT');
-                }
-
-                fetch(url, {
-                        method: 'POST',
+        // =============== DELETAR PACIENTE (se precisar no futuro) ===============
+        window.deletePaciente = function (id, nome = 'este paciente') {
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: `O paciente "${nome}" será excluído permanentemente!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    fetch(`/pacientes/${id}`, {
+                        method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        },
-                        body: formData
+                        }
                     })
                     .then(r => r.json())
                     .then(res => {
                         if (res.success) {
-                            alert(res.message || 'Salvo com sucesso!');
-                            closePacienteModal();
-                            location.reload();
+                            Swal.fire('Excluído!', res.message, 'success').then(() => location.reload());
                         } else {
-                            let erro = 'Erro ao salvar.';
-                            if (res.errors) {
-                                erro = Object.values(res.errors).flat().join('\n');
-                            }
-                            alert(erro);
+                            Toast.fire({ icon: 'error', title: res.message || 'Erro ao excluir' });
                         }
                     })
-                    .catch(err => {
-                        console.error(err);
-                        alert('Erro de conexão.');
-                    });
+                    .catch(() => Toast.fire({ icon: 'error', title: 'Erro de conexão' }));
+                }
             });
-        }
+        };
+
+        // =============== SALVAR (CREATE / UPDATE) ===============
+        document.getElementById('btnSalvarPaciente')?.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const form = document.getElementById('formPaciente');
+            const formData = new FormData(form);
+            const pacienteId = document.getElementById('pacienteId').value;
+
+            // Sempre POST + updateOrCreate no backend (recomendado)
+            fetch('{{ route("pacientes.store") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    closePacienteModal();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sucesso!',
+                        text: res.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                } else {
+                    let erro = 'Erro ao salvar.';
+                    if (res.errors) {
+                        erro = Object.values(res.errors).flat().join('<br>');
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        html: erro
+                    });
+                }
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'Não foi possível conectar ao servidor.'
+                });
+            });
+        });
     });
 </script>
+@endpush
