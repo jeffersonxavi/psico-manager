@@ -74,12 +74,28 @@ class SessaoController extends Controller
             'conteudo' => 'nullable|string',
         ]);
 
+        // Atualiza a sessão
         $sessao->update([
             'data_sessao' => $request->data_sessao,
             'conteudo' => $request->conteudo,
         ]);
 
-        return redirect()->back()->with('success', 'Sessão atualizada com sucesso!');
+        // 🔥 Atualiza a consulta vinculada (se existir)
+        if ($sessao->consulta_id) {
+            $consulta = Consulta::find($sessao->consulta_id);
+
+            if ($consulta) {
+                $consulta->update([
+                    'data_hora_inicio' => $request->data_sessao,
+                    'data_hora_fim' => \Carbon\Carbon::parse($request->data_sessao)->addHour(), // opcional
+                    'paciente_id' => $sessao->paciente_id, // mantém paciente sincronizado
+                ]);
+            }
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', 'Sessão atualizada com sucesso!');
     }
 
     public function destroy(Sessao $sessao)

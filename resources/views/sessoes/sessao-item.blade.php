@@ -63,10 +63,10 @@
 
     {{-- ## Conteúdo da sessão (Relato Principal) --}}
     @if($sessao->conteudo)
-        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
-            <p class="text-gray-700 leading-relaxed whitespace-pre-line text-sm font-normal">
-                {!! nl2br(e($sessao->conteudo)) !!}
-            </p>
+       <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+            <div class="prose prose-sm max-w-none text-gray-700 leading-relaxed">
+                {!! $sessao->conteudo ?? '<em class="text-gray-500">Nenhum relato registrado.</em>' !!}
+            </div>
         </div>
     @endif
 

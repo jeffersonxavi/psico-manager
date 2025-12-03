@@ -100,22 +100,43 @@ class ConsultaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $consulta = Consulta::where('id', $id)
-            ->where('profissional_id', Auth::id())
-            ->firstOrFail();
+    $consulta = Consulta::where('id', $id)
+        ->where('profissional_id', Auth::id())
+        ->firstOrFail();
 
-        $data = $request->validate([
-            'paciente_id' => ['required', 'exists:pacientes,id', Rule::exists('pacientes', 'id')->where('profissional_id', Auth::id())],
-            'titulo' => 'required|string|max:255',
-            'data_hora_inicio' => 'required|date',
-            'data_hora_fim' => 'required|date|after:data_hora_inicio',
-            'observacoes' => 'nullable|string',
-            'status' => 'nullable|in:agendado,confirmado,atendido,faltou,desmarcado',
+    $data = $request->validate([
+        'paciente_id' => [
+            'required',
+            'exists:pacientes,id',
+            Rule::exists('pacientes', 'id')->where('profissional_id', Auth::id())
+        ],
+        'titulo' => 'required|string|max:255',
+        'data_hora_inicio' => 'required|date',
+        'data_hora_fim' => 'required|date|after:data_hora_inicio',
+        'observacoes' => 'nullable|string',
+        'status' => 'nullable|in:agendado,confirmado,atendido,faltou,desmarcado',
+    ]);
+
+    // Atualiza a consulta
+    $consulta->update($data);
+
+    // Atualiza sessão vinculada (se existir)
+    $sessao = Sessao::where('consulta_id', $consulta->id)->first();
+
+    if ($sessao) {
+        $sessao->update([
+            'paciente_id' => $data['paciente_id'],
+            'data_sessao' => $data['data_hora_inicio'],
         ]);
-
-        $consulta->update($data);
-        return response()->json(['success' => true, 'consulta' => $consulta, 'message' => 'Consulta atualizada com sucesso!'], 200);
     }
+
+    return response()->json([
+        'success' => true,
+        'consulta' => $consulta,
+        'message' => 'Consulta atualizada com sucesso!'
+    ], 200);
+    }
+
 
     /**
      * Deleta (cancela) uma consulta.
