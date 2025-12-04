@@ -66,9 +66,10 @@ Route::middleware([
     // Iniciar atendimento
     Route::get('/consultas/{consulta}/iniciar-atendimento', [ConsultaController::class, 'iniciarAtendimento'])
         ->name('consultas.iniciar-atendimento');
-// Adicione isso logo abaixo da rota da agenda
-Route::get('/consultas', function () {
-    return redirect()->route('agenda.index');
-})->name('consultas.index');
+    // Adicione isso logo abaixo da rota da agenda
+    Route::get('/consultas', function () {
+        return redirect()->route('agenda.index');
+    })->name('consultas.index');
+    Route::get('/api/sessoes/buscar-por-consulta/{id}', [SessaoController::class, 'buscarPorConsulta']);
 
 });

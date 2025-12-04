@@ -28,6 +28,42 @@ class SessaoController extends Controller
 
         return view('sessoes.create', compact('paciente', 'dataSessao'));
     }
+    
+    /**
+     * Busca uma sessão baseada no ID da consulta.
+     * Retorna dados em JSON, incluindo paciente, profissional e registros.
+     *
+     * @param int $consultaId - ID da consulta
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function buscarPorConsulta($consultaId)
+    {
+        // Busca a sessão relacionada à consulta, incluindo paciente, profissional e registros
+        $sessao = \App\Models\Sessao::with(['paciente', 'profissional', 'registros.profissional'])
+            ->where('consulta_id', $consultaId)
+            ->first();
+
+        // Se não encontrar, retorna 404
+        if (!$sessao) {
+            return response()->json(null, 404);
+        }
+
+        // Retorna os dados da sessão em formato JSON
+        return response()->json([
+            'id' => $sessao->id,
+            'data_sessao' => $sessao->data_sessao?->format('d/m/Y H:i') ?? '-', // data formatada ou '-'
+            'conteudo' => $sessao->conteudo ?? '',
+            'paciente_nome' => $sessao->paciente?->nome ?? '-', // nome do paciente ou '-'
+            'profissional_nome' => $sessao->profissional?->name ?? '-', // nome do profissional ou '-'
+            'registros' => $sessao->registros->map(fn($r) => [
+                'id' => $r->id,
+                'tipo' => $r->tipo,
+                'conteudo' => $r->conteudo ?? '',
+                'created_at' => $r->created_at?->format('d/m/Y H:i') ?? '-',
+                'usuario_nome' => $r->profissional?->name ?? 'Usuário Desconhecido', // nome do profissional que registrou ou fallback
+            ]),
+        ]);
+    }
 
 
  public function store(Request $request, Paciente $paciente)

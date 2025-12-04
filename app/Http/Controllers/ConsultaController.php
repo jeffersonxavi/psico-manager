@@ -185,7 +185,7 @@ class ConsultaController extends Controller
             ],
         ];
     }
-// app/Http/Controllers/ConsultaController.php (ou onde estiver)
+// app/Http/Controllers/ConsultaController.php
 public function iniciarAtendimento(Consulta $consulta)
 {
     if (!in_array($consulta->status, ['agendado', 'confirmado'])) {

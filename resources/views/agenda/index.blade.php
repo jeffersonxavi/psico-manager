@@ -61,6 +61,7 @@
 
 @include('pacientes.create')
 @include('agenda.modal-agendamento')
+@include('sessoes.modal-sessao')
 @endsection
 
 
