@@ -9,8 +9,8 @@ use App\Http\Controllers\RegistroController;
 
 // Página inicial
 Route::get('/', function () {
-    return view('welcome');
-});
+    return redirect()->route('agenda.index');
+})->middleware(['auth', 'verified']);
 // Rotas protegidas por autenticação
 Route::middleware([
     'auth:sanctum',
@@ -18,13 +18,10 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    // Dashboard
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 
     // Agenda de consultas
-    Route::get('/agenda', [ConsultaController::class, 'index'])->name('agenda.index');
+    Route::get('/agenda', [ConsultaController::class, 'index'])
+    ->name('agenda.index');
     Route::get('/api/consultas', [ConsultaController::class, 'apiEvents'])->name('consultas.api');
     Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
     Route::put('/consultas/{id}', [ConsultaController::class, 'update'])->name('consultas.update');
