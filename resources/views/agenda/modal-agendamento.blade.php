@@ -159,3 +159,53 @@
         </div>
     </div>
 </div>
+
+<script>
+    const form = document.getElementById('formAgendamento');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    // Assumindo que a função closeModal() existe e tem uma transição de ~150ms
+
+    // NOVO: Função que lida com o envio do formulário
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // 1. Mostrar o Loading
+        if (loadingOverlay) {
+            loadingOverlay.classList.remove('hidden');
+        }
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // SIMULAÇÃO DE ATRASO (Representando a requisição HTTP real)
+        setTimeout(() => {
+            console.log('Agendamento salvo com sucesso (simulado)!');
+
+            // 2. Primeiro, ESCONDE o Loading e INICIA a transição do modal principal
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('hidden');
+            }
+            closeModal();
+
+            // 3. SweetAlert de Sucesso (Executa após o modal principal fechar)
+            // O tempo de 200ms garante que a transição de fechamento do closeModal() (cerca de 150ms) termine.
+            setTimeout(() => {
+                /* Swal.fire({
+                    icon: 'success',
+                    title: 'Agendamento Salvo!', 
+                        timer: 2000,
+                    showConfirmButton: false
+                }); */
+
+                // Opcional: Recarregar o calendário (Se estiver integrando o FullCalendar)
+                // if (typeof calendar !== 'undefined' && calendar.refetchEvents) {
+                //     calendar.refetchEvents();
+                // }
+
+            }, 200); // <-- Novo timeout para o SweetAlert
+
+        }, 0); // <-- Tempo de simulação da requisição reduzido para 500ms (mais realista)
+    });
+</script>
