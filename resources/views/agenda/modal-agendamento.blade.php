@@ -44,10 +44,14 @@
                     <label class="block text-xs font-semibold mb-1 text-gray-700">
                         Título / Motivo <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" id="titulo" name="titulo"
-                        class="w-full border-gray-300 rounded-lg px-2 py-1.5 text-sm
-                                  focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                        placeholder="Ex: Sessão de terapia" required>
+                    <select id="titulo" name="titulo" class="w-full border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                        <option value="sessao_terapia" selected>Sessão de Terapia</option>
+                        <option value="rotina">Rotina</option>
+                        <option value="retorno">Retorno</option>
+                        <option value="avaliacao">Avaliação</option>
+                        <option value="acompanhamento">Acompanhamento</option>
+                        <option value="acompanhamento">Feedback</option>
+                    </select>
                 </div>
 
                 <div class="grid grid-cols-3 gap-2 p-2 bg-blue-50 rounded-lg border border-blue-200">

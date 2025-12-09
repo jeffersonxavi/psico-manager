@@ -20,7 +20,7 @@ function resetarModal() {
     });
     // Limpa campos manuais
     document.getElementById("paciente_id").value = "";
-    document.getElementById("titulo").value = "";
+    document.getElementById("titulo").value = "sessao_terapia";
     document.getElementById("status").value = "agendado";
     document.getElementById("modalDate").value = "";
     document.getElementById("modalStart").value = "";
