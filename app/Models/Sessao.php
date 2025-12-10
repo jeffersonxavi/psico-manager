@@ -29,4 +29,8 @@ class Sessao extends Model
     {
         return $this->hasMany(Registro::class,'sessao_id');
     }
+        public function consulta()
+    {
+        return $this->belongsTo(Consulta::class, 'consulta_id');
+    }
 }

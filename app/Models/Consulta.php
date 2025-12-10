@@ -43,6 +43,6 @@ class Consulta extends Model
     }
        public function sessoes()
     {
-        return $this->hasOne(Sessao::class, 'sessao_id');
+        return $this->hasOne(Sessao::class, 'consulta_id');
     }
 }
