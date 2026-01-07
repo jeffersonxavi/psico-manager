@@ -49,9 +49,9 @@
 </head>
 <!-- Marca d'água super suave – canto inferior direito -->
 <div class="fixed bottom-4 right-4 z-50 pointer-events-none">
-    <a href="https://jeffersonxavi.github.io/portfolio" 
-       target="_blank"
-       class="pointer-events-auto inline-flex items-center gap-2 bg-white/70 backdrop-blur-md text-gray-500 hover:text-primary text-[11px] font-medium px-3 py-1.5 rounded-full shadow-sm border border-gray-200/50 hover:border-primary/30 hover:bg-white/90 hover:shadow-md transition-all duration-500">
+    <a href="https://jeffersonxavi.github.io/portfolio"
+        target="_blank"
+        class="pointer-events-auto inline-flex items-center gap-2 bg-white/70 backdrop-blur-md text-gray-500 hover:text-primary text-[11px] font-medium px-3 py-1.5 rounded-full shadow-sm border border-gray-200/50 hover:border-primary/30 hover:bg-white/90 hover:shadow-md transition-all duration-500">
 
         <i class="fas fa-laptop-code text-[10px] opacity-70 group-hover:opacity-100 transition-opacity"></i>
         <span class="opacity-80 group-hover:opacity-100 transition-opacity">
@@ -59,19 +59,26 @@
         </span>
     </a>
 </div>
+
 <body class="bg-gradient-to-br from-sky-50 via-white to-sky-50 min-h-screen flex">
 
     <aside class="w-64 bg-sky-100 border-r border-sky-200 shadow-sidebar rounded-r-3xl flex flex-col h-screen sticky top-0">
 
-        <div class="p-8 text-center border-b border-sky-200 bg-white shadow-sm">
-            <div class="flex items-center justify-center gap-2">
-                <span class="brain-icon text-3xl text-primary-dark"></span>
-                <h1 class="text-3xl font-extrabold bg-gradient-to-r from-primary-dark to-primary bg-clip-text text-transparent">
+        <div class="p-8 text-center border-b border-sky-200 bg-white">
+            <div class="flex items-center justify-center gap-1">
+                <!-- Imagem cérebro -->
+                <img
+                    src="{{ asset('images/cerebro.png') }}"
+                    alt="Cérebro humano"
+                    class="w-14 h-14 object-contain"
+                >
+                <h1 class="text-3xl font-semibold text-primary-dark whitespace-nowrap leading-none">
                     Ellen Nani
                 </h1>
             </div>
-            <p class="text-xs font-medium text-primary-dark/70 mt-3 tracking-widest uppercase">
-                Psicologia & Bem-estar
+
+            <p class="text-xs text-primary-dark/60 mt-2 tracking-widest uppercase">
+                Psicologia &amp; Bem-estar
             </p>
         </div>
 
